@@ -1,7 +1,7 @@
 package edu.grinnell.sortingvisualizer.sorts;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import edu.grinnell.sortingvisualizer.events.CompareEvent;
 import edu.grinnell.sortingvisualizer.events.CopyEvent;
@@ -61,33 +61,32 @@ public class Sorts {
 		return events;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private static <T extends Comparable<T>> List<SortEvent<T>> merge(T[] arr, int lo, int mid, int hi) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		Comparable<T>[] temp = (T[]) new Comparable[hi-lo];
+		List<T> temp = new ArrayList<T>();
 		int first = lo;
 		int second = mid;
-		int i = 0;
 		while (first < mid && second < hi) {
 			events.add(new CompareEvent<T>(first,second));
 			if(arr[first].compareTo(arr[second]) < 1) {
-				temp[i++] = arr[first++];				
+				temp.add(arr[first++]);				
 			} else {
-				temp[i++] = arr[second++];
+				temp.add(arr[second++]);
 			}
 		}
 		
 		while (first < mid) {
-			temp[i++] = arr[first++];
+			temp.add(arr[first++]);	
 		}
 		
 		while (second < hi) {
-			temp[i++] = arr[second++];
+			temp.add(arr[second++]);
 		}
 		
-		for(int j = 0; j < temp.length; j++) {
-			arr[j+lo] = (T) temp[j];
-			events.add(new CopyEvent<T>(j+lo,(T) temp[j]));
+		for(int j = 0; j < temp.size(); j++) {
+			arr[j+lo] = temp.get(j);
+			events.add(new CopyEvent<T>(j+lo,(T) temp.get(j)));
 		}
 		return events;
 
@@ -113,29 +112,6 @@ public class Sorts {
 		return events;
 	}
 
-	/**Determine the pivot by taking the median of the first, middle, and last element
-	 * Guarantees that we will not choose the worst-case pivot
-	 * @param arr
-	 * @param low
-	 * @param high
-	 * @return pivot, an integer position within the array
-	 */
-	
-	public static <T extends Comparable<T>> int findPivot(T[] arr, int low, int high) {
-		int mid = (high-low) /2;
-		T first = arr[low];
-		T middle = arr[mid];
-		T last = arr[high];
-		if ((first.compareTo(middle) <= 0) && (middle.compareTo(last) <= 0)) {
-			return mid;
-		}
-		else if ((middle.compareTo(last) <= 0) && (last.compareTo(first) <= 0)) {
-			return high;
-		}
-		else {
-			return low;
-		}
-	}
 	
 	public static <T extends Comparable<T>> List<SortEvent<T>> partition(T[] arr, int low, int high) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
@@ -167,35 +143,44 @@ public class Sorts {
 	}
 	
 	public static <T extends Comparable<T>>  List<SortEvent<T>> quickSort(T[] arr) {
-		List<SortEvent<T>> events = partition(arr, 0, arr.length-1);
-		return events;
+		return partition(arr, 0, arr.length-1);
 	}
 	
 	
 	
-	public static <T extends Comparable<T>> boolean isSorted(List<T> lst) {
-		if (lst.size() <= 1) {
+	public static <T extends Comparable<T>> boolean isSorted(T[] arr, List<SortEvent<T>> events) {
+		if (arr.length <= 1) {
 			return true;
 		}
-		for (int i = 1; i < lst.size(); i++) {
-			if (lst.get(i-1).compareTo(lst.get(i)) > 0) {
+		for (int i = 1; i < arr.length; i++) {
+			events.add(new CompareEvent<T>(i-1, i));
+			if (arr[i-1].compareTo(arr[i]) > 0) {
 				return false;
 			}   
 		}
 		return true;
 	}
 
-	public static <T extends Comparable<T>> void bogoSort(T[] arr) {
-		List<T> lst = new ArrayList<T>();
-		for (int i = 0; i < arr.length; i++) {
-			lst.add(arr[i]);
+	
+	public static <T extends Comparable<T>> void shuffle(T[] arr, List<SortEvent<T>> events) {
+		int index = 0;
+		Random rand = new Random();
+		for(int i = 0; i < arr.length; i++) {
+			index = rand.nextInt(arr.length - 1);
+			T temp = arr[index];
+			arr[index] = arr[i];
+			arr[i] = temp;
+			events.add(new SwapEvent<T>(index, i));
 		}
-		while(!isSorted(lst)) {
-			Collections.shuffle(lst);
+	}
+	
+	
+	public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr) {
+		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
+		while(!isSorted(arr, events)) {
+			shuffle(arr, events);
 		}
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = lst.get(i);
-		}
+		return events;
 	}
 	
 	public static <T extends Comparable<T>> void eventSort(T[] l, List<SortEvent<T>> events) {

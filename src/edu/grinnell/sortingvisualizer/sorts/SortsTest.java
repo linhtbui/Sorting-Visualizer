@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.List;
+
+import edu.grinnell.sortingvisualizer.events.SortEvent;
+
 public class SortsTest {
 	
 	private static void isSorted(Integer[] arr) {
@@ -129,5 +133,50 @@ public class SortsTest {
 		Sorts.bogoSort(reverse);
 		isSorted(reverse);
 		
+	}
+	
+	@Test
+	public void eventTest() {
+		Integer[] arr = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events = Sorts.mergeSort(arr);
+		isSorted(arr);
+		Integer[] arragain = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain, events);
+		isSorted(arragain);
+		
+		Integer[] arr2 = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events2 = Sorts.selectionSort(arr2);
+		isSorted(arr2);
+		Integer[] arragain2 = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain2, events2);
+		isSorted(arragain2);
+		
+		Integer[] arr3 = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events3 = Sorts.bubbleSort(arr3);
+		isSorted(arr3);
+		Integer[] arragain3 = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain3, events3);
+		isSorted(arragain3);
+
+		Integer[] arr4 = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events4 = Sorts.insertionSort(arr4);
+		isSorted(arr4);
+		Integer[] arragain4 = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain4, events4);
+		isSorted(arragain4);
+
+		Integer[] arr5 = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events5 = Sorts.quickSort(arr5);
+		isSorted(arr5);
+		Integer[] arragain5 = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain5, events5);
+		isSorted(arragain5);
+		
+		Integer[] arr6 = {3, 2, 7, 0, 7, -1, 6, 9};
+		List<SortEvent<Integer>> events6 = Sorts.bogoSort(arr6);
+		isSorted(arr6);
+		Integer[] arragain6 = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.eventSort(arragain6, events6);
+		isSorted(arragain6);
 	}
 }
