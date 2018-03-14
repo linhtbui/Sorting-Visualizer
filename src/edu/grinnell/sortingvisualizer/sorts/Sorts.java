@@ -90,9 +90,25 @@ public class Sorts {
 
 	}
 
-	public static <T extends Comparable<T>> void BOGOSort(T[] arr) {
+	public static <T extends comparable<T>> boolean isSorted(List<T> lst) {
+            for (int i = 1; i < lst.size(); i++) {
+                if (lst.get(i-1).compareTo(lst.(i) > 0) {
+                 return false;
+             }   
+         }
+         return true;
+     }
 
+     public static <T extends comparable<T>> void bogoSort(T[] arr) {
+	 List<T> lst = new ArrayList<T>();
+	 for (int i = 0; i < arr.length; i++) {
+    		lst.add(i);
 	}
+         while(!isSorted(lst)) {
+            Collections.shuffle(lst);
+         }
+	 arr = lst.toArray();
+     }
 	
 	void eventSort(ArrayList<T> l, List<SortEvent<T>> events) {
 		
