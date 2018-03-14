@@ -45,4 +45,14 @@ public class SortsTest {
 		}
 		
 	}
+	
+	@Test
+	public void bogoTest() {
+		Integer[] arr = {3, 2, 7, 0, 7, -1, 6, 9};
+		Sorts.bogoSort(arr);
+		for (int i = 1; i < arr.length; i++) {
+			assertTrue(arr[i-1] <= arr[i]);
+		}
+		
+	}
 }
