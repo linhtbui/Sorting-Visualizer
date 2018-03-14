@@ -1,25 +1,32 @@
 package edu.grinnell.sortingvisualizer.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CopyEvent <T extends Comparable<T>> implements SortEvent<T> {
 
-	@Override
+	private int index;
+	private T data;
+	
+	public CopyEvent(int dex, T dat) {
+		this.index = dex;
+		this.data = dat;
+	}
+	
 	public void apply(T[] arr) {
-		// TODO Auto-generated method stub
-		
+		arr[this.index] = this.data;
 	}
 
-	@Override
+	
 	public List<Integer> getAffectedIndices() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> ret = new ArrayList<Integer>();
+		ret.add(this.index);
+		return ret;
 	}
 
-	@Override
+	
 	public boolean isEmphasized() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

@@ -1,6 +1,9 @@
 package edu.grinnell.sortingvisualizer.sorts;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import edu.grinnell.sortingvisualizer.events.SortEvent;
 
 public class Sorts {
 
@@ -86,31 +89,92 @@ public class Sorts {
 		merge(arr, 0, (arr.length) / 2, arr.length);
 	}
 
-	public static <T extends Comparable<T>> void QuickSort(T[] arr) {
-
+	/**Determine the pivot by taking the median of the first, middle, and last element
+	 * Guarantees that we will not choose the worst-case pivot
+	 * @param arr
+	 * @param low
+	 * @param high
+	 * @return pivot, an integer position within the array
+	 */
+	/*
+	public static <T extends Comparable<T>> int findPivot(T[] arr, int low, int high) {
+		int mid = (high-low) /2;
+		T first = arr[low];
+		T middle = arr[mid];
+		T last = arr[high];
+		if ((first.compareTo(middle) <= 0) && (middle.compareTo(last) <= 0)) {
+			return mid;
+		}
+		else if ((middle.compareTo(last) <= 0) && (last.compareTo(first) <= 0)) {
+			return high;
+		}
+		else {
+			return low;
+		}
 	}
-
-	public static <T extends comparable<T>> boolean isSorted(List<T> lst) {
-            for (int i = 1; i < lst.size(); i++) {
-                if (lst.get(i-1).compareTo(lst.(i) > 0) {
-                 return false;
-             }   
-         }
-         return true;
-     }
-
-     public static <T extends comparable<T>> void bogoSort(T[] arr) {
-	 List<T> lst = new ArrayList<T>();
-	 for (int i = 0; i < arr.length; i++) {
-    		lst.add(i);
-	}
-         while(!isSorted(lst)) {
-            Collections.shuffle(lst);
-         }
-	 arr = lst.toArray();
-     }
 	
-	void eventSort(ArrayList<T> l, List<SortEvent<T>> events) {
+	public static <T extends Comparable<T>> int partition(T[] arr, int low, int high) {
+		int pivotIndex = findPivot(arr, low, high);
+		T pivot = arr[pivotIndex];
+		arr[pivotIndex] = arr[high];
+		arr[high] = pivot;
+		int i = high-1;
+		for (int j=low; j<i; j++) {
+			if(arr[j].compareTo(pivot) >= 0 && (arr[i].compareTo(pivot) <= 0)) {
+				T temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i--;
+			}
+		}
+		arr[high] = arr[i-1];
+		arr[i-1] = pivot;
+		return i-1;
+	}
+	
+	public static <T extends Comparable<T>> void quickSortHelper(T[] arr, int low, int high) {
+		if (low < (high-1)) {
+			System.out.println("low = " + low + " high = " + high);
+			for (int i=0; i<arr.length; i++) {
+				System.out.print(arr[i] + " ");
+			}
+			System.out.println();
+			int part = partition(arr, low, high);
+			quickSortHelper(arr, low, part-1);
+			quickSortHelper(arr, part+1, high);
+		}
+	}
+	
+	public static <T extends Comparable<T>> void quickSort(T[] arr) {
+		quickSortHelper(arr, 0, arr.length-1);
+	}
+*/
+	public static <T extends Comparable<T>> boolean isSorted(List<T> lst) {
+		if (lst.size() <= 1) {
+			return true;
+		}
+		for (int i = 1; i < lst.size(); i++) {
+			if (lst.get(i-1).compareTo(lst.get(i)) > 0) {
+				return false;
+			}   
+		}
+		return true;
+	}
+
+	public static <T extends Comparable<T>> void bogoSort(T[] arr) {
+		List<T> lst = new ArrayList<T>();
+		for (int i = 0; i < arr.length; i++) {
+			lst.add(arr[i]);
+		}
+		while(!isSorted(lst)) {
+			Collections.shuffle(lst);
+		}
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = lst.get(i);
+		}
+	}
+	
+	public static <T extends Comparable<T>> void eventSort(ArrayList<T> l, List<SortEvent<T>> events) {
 		
 	}
 }
