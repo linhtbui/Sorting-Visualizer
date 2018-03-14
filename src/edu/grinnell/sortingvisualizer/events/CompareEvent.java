@@ -5,8 +5,8 @@ import java.util.List;
 
 public class CompareEvent<T extends Comparable<T>>  implements SortEvent<T> {
 
-	public int indexa;
-	public int indexb;
+	private int indexa;
+	private int indexb;
 	
 	public CompareEvent(int a, int b) {
 		this.indexa = a;
@@ -14,7 +14,7 @@ public class CompareEvent<T extends Comparable<T>>  implements SortEvent<T> {
 	}
 	
 	public void apply(T[] arr) {
-		return;
+		arr[indexa].compareTo(arr[indexb]);
 	}
 
 	

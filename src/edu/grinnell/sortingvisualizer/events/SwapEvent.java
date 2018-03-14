@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class SwapEvent <T extends Comparable<T>>  implements SortEvent<T> {
 
-	public int indexa;
-	public int indexb;
+	private int indexa;
+	private int indexb;
 	
 	public SwapEvent(int a, int b) {
 		this.indexa = a;

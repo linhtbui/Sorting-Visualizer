@@ -90,7 +90,7 @@ public class SortsTest {
 		isSorted(reverse);
 		
 	}
-	/*
+	
 	@Test
 	public void quickTest() {
 		Integer[] arr = {3, 2, 7, 0, 7, -1, 6, 9};
@@ -110,7 +110,7 @@ public class SortsTest {
 		isSorted(reverse);
 		
 	}
-	*/
+	
 	@Test
 	public void bogoTest() {
 		Integer[] arr = {3, 2, 7, 0, 7, -1, 6, 9};
