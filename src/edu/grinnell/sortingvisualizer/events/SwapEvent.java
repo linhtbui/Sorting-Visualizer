@@ -3,7 +3,7 @@ package edu.grinnell.sortingvisualizer.events;
 import java.util.List;
 import java.util.ArrayList;
 
-public class SwapEvent <T extends Comparable<T>>  implements SortEvent<T> {
+public class SwapEvent <T>  implements SortEvent<T> {
 
 	private int indexa;
 	private int indexb;

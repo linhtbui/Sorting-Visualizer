@@ -1,6 +1,6 @@
 package edu.grinnell.sortingvisualizer.audio;
-import java.util.ArrayList;
-import java.util.Collections;
+
+import java.util.Random;
 
 
 /**
@@ -10,13 +10,13 @@ import java.util.Collections;
  */
 public class NoteIndices {
 	private Integer[] indices;
-	private Integer[] highlightNotes;
+	private boolean[] highlightNotes;
 
     /**
      * @param n the size of the scale object that these indices map into
      */
     public NoteIndices(int n) {
-        initializeAndShuffle(n);  
+        initializeAndShuffle(n); 
     }
   
     /**
@@ -26,8 +26,23 @@ public class NoteIndices {
      * @param n the size of the scale object that these indices map into
      */
     public void initializeAndShuffle(int n) {
-
-       }
+    	indices = new Integer[n];
+    	for (int i = 0; i < indices.length; i++) {
+    		indices[i] = i;
+    	}
+    	Random rand = new Random();
+    	int j;
+    	int temp;
+    	for (int i = indices.length -1; i>=0; i--) {
+    		j = rand.nextInt(i+1);
+    		temp = indices[j];
+    		indices[j] = indices[i];
+    		indices[i] = temp;
+    	}
+    	highlightNotes = new boolean[indices.length];
+    }
+    
+    
     
     /** @return the indices of this NoteIndices object */
     public Integer[] getNotes() { 
@@ -39,17 +54,22 @@ public class NoteIndices {
      * @param index the index to highlight
      */
     public void highlightNote(int index) {
-        //highlightNotes.add(index);
+        highlightNotes[index] = true;
     }
     
     /** @return true if the given index is highlighted */
     public boolean isHighlighted(int index) {
-        // TODO: fill me in
-        return false;
+        return highlightNotes[index];
     }
     
     /** Clears all highlighted indices from this collection */
     public void clearAllHighlighted() {
-        // TODO: fill me in
+        for (int i = 0; i < highlightNotes.length; i++) {
+        	highlightNotes[i] = false;
+        }
+    }
+    
+    public int length() {
+    	return indices.length;
     }
 }

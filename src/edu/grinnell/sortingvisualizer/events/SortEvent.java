@@ -2,7 +2,7 @@ package edu.grinnell.sortingvisualizer.events;
 
 import java.util.List;
 
-public interface SortEvent<T extends Comparable<T>> {
+public interface SortEvent<T> {
 	
 	public void apply(T[] arr);
 	

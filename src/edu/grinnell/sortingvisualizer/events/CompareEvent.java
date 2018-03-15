@@ -3,7 +3,7 @@ package edu.grinnell.sortingvisualizer.events;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompareEvent<T extends Comparable<T>>  implements SortEvent<T> {
+public class CompareEvent<T>  implements SortEvent<T> {
 
 	private int indexa;
 	private int indexb;
@@ -14,7 +14,6 @@ public class CompareEvent<T extends Comparable<T>>  implements SortEvent<T> {
 	}
 	
 	public void apply(T[] arr) {
-		arr[indexa].compareTo(arr[indexb]);
 	}
 
 	
