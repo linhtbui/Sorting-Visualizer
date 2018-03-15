@@ -112,11 +112,25 @@ public class Sorts {
 		return events;
 	}
 
-	
+	public static <T extends Comparable<T>> int findPivot(T[] arr, int low, int high) {
+		int mid = (high-low) /2;
+		T first = arr[low];
+		T middle = arr[mid];
+		T last = arr[high];
+		if ((first.compareTo(middle) <= 0) && (middle.compareTo(last) <= 0)) {
+			return mid;
+		}
+		else if ((middle.compareTo(last) <= 0) && (last.compareTo(first) <= 0)) {
+			return high;
+		}
+		else {
+			return low;
+		}
+	}
 	public static <T extends Comparable<T>> List<SortEvent<T>> partition(T[] arr, int low, int high) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		if(low < high) {
-			T pivot = arr[high];
+			T pivot = arr[findPivot(arr,low, high)];
 			int i = low -1;
 			for (int j = low; j < high; j++) {
 				events.add(new CompareEvent<T>(j, high));
