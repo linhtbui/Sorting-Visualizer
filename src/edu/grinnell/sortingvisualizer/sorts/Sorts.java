@@ -61,32 +61,33 @@ public class Sorts {
 		return events;
 	}
 
-	
+	@SuppressWarnings("unchecked")
 	private static <T extends Comparable<T>> List<SortEvent<T>> merge(T[] arr, int lo, int mid, int hi) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		List<T> temp = new ArrayList<T>();
+		Object[] temp = new Object[hi-lo];		
 		int first = lo;
 		int second = mid;
+		int index = 0;
 		while (first < mid && second < hi) {
 			events.add(new CompareEvent<T>(first,second));
 			if(arr[first].compareTo(arr[second]) < 1) {
-				temp.add(arr[first++]);				
+				temp[index++]= arr[first++];			
 			} else {
-				temp.add(arr[second++]);
+				temp[index++]= arr[second++];		
 			}
 		}
 		
 		while (first < mid) {
-			temp.add(arr[first++]);	
+			temp[index++] = arr[first++];
 		}
 		
 		while (second < hi) {
-			temp.add(arr[second++]);
+			temp[index++] = arr[second++];
 		}
 		
-		for(int j = 0; j < temp.size(); j++) {
-			arr[j+lo] = temp.get(j);
-			events.add(new CopyEvent<T>(j+lo,(T) temp.get(j)));
+		for(int j = 0; j < temp.length; j++) {
+			arr[j+lo] = (T) temp[j];
+			events.add(new CopyEvent<T>(j+lo,(T) temp[j]));
 		}
 		return events;
 
@@ -94,7 +95,7 @@ public class Sorts {
 	
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSortHelper(T[] arr, int lo, int hi) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		if (hi > lo + 1) {
+		if (lo < hi - 1) {
 			int mid = lo + (hi - lo) /2;
 			List<SortEvent<T>> event1 = mergeSortHelper(arr, lo, mid);
 			List<SortEvent<T>> event2 = mergeSortHelper(arr, mid, hi);
@@ -108,7 +109,13 @@ public class Sorts {
 
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSort(T[] arr) {
 		
-		List<SortEvent<T>> events = mergeSortHelper(arr, 0, arr.length);
+		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
+		if (arr==null || arr.length == 1)
+			return events;
+					
+		else {
+			events = mergeSortHelper(arr, 0, arr.length);
+		}
 		return events;
 	}
 
@@ -130,7 +137,8 @@ public class Sorts {
 	public static <T extends Comparable<T>> List<SortEvent<T>> partition(T[] arr, int low, int high) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		if(low < high) {
-			T pivot = arr[findPivot(arr,low, high)];
+			//T pivot = arr[findPivot(arr,low, high)];
+			T pivot = arr[high];
 			int i = low -1;
 			for (int j = low; j < high; j++) {
 				events.add(new CompareEvent<T>(j, high));
