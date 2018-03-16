@@ -14,13 +14,13 @@ public class CopyEvent <T> implements SortEvent<T> {
 	}
 	
 	public void apply(T[] arr) {
-		arr[this.index] = this.data;
+		arr[index] = data;
 	}
 
 	
 	public List<Integer> getAffectedIndices() {
 		List<Integer> ret = new ArrayList<Integer>();
-		ret.add(this.index);
+		ret.add(index);
 		return ret;
 	}
 

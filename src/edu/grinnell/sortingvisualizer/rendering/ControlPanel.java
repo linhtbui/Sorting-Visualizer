@@ -147,7 +147,7 @@ public class ControlPanel extends JPanel {
                 // TODO: fill me in
                 // 1. Create the sorting events list
                 // 2. Add in the compare events to the end of the list
-                Integer[] copyNotes = Arrays.copyOf(notes.getNotes(), notes.length());
+                Integer[] copyNotes = Arrays.copyOf(notes.getNotes(), notes.getNotes().length);
                 final List<SortEvent<Integer>> events = generateEvents((String) sorts.getSelectedItem(), copyNotes);
                 
                 // NOTE: The Timer class repetitively invokes a method at a
@@ -164,19 +164,17 @@ public class ControlPanel extends JPanel {
                     public void run() {
                     	if (index < events.size()) {
                     		SortEvent<Integer> e = events.get(index++);
+                    		notes.clearAllHighlighted();
                     		// 1. Apply the next sort event.
                     		e.apply(notes.getNotes());
                     		// 3. Play the corresponding notes denoted by the
                     		//    affected indices logged in the event.
-                    		for (int i = 0; i < 2; i++) {
-                    			scale.playNote(e.getAffectedIndices().get(i), e.isEmphasized());
-                    		}
                     		// 4. Highlight those affected indices.
-                    		for (int i = 0; i < 2; i++) {
-                    			notes.highlightNote(e.getAffectedIndices().get(i));
-                    		}
-
-                    		panel.repaint();
+                    		for(Integer ind : e.getAffectedIndices()) {
+                            	scale.playNote(ind, e.isEmphasized());
+                            	notes.highlightNote(ind);
+                            }
+                            panel.repaint();
                     	} else {
                     		this.cancel();
                     		panel.repaint();

@@ -61,84 +61,72 @@ public class Sorts {
 		return events;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T extends Comparable<T>> List<SortEvent<T>> merge(T[] arr, int lo, int mid, int hi) {
-		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		Object[] temp = new Object[hi-lo];		
-		int first = lo;
-		int second = mid;
-		int index = 0;
-		while (first < mid && second < hi) {
-			events.add(new CompareEvent<T>(first,second));
-			if(arr[first].compareTo(arr[second]) < 1) {
-				temp[index++]= arr[first++];			
-			} else {
-				temp[index++]= arr[second++];		
+    /***
+     * Implements merge sort
+     * 
+     * @param l
+     *            an array list
+     * @param lo
+     *            the index of the starting element to be sorted (inclusive)
+     * @param hi
+     *            the index of the last element to be sorted (exclusive)
+     * 
+     * @return a list of important events during the sorting process
+     * 
+     */
+	public static <T extends Comparable<T>> void merge(T[] l, int lo,
+			int hi, List<SortEvent<T>> events) {
+		int mid, left, right;
+		if (lo >= hi)
+			return;
+		mid = (lo + hi) / 2;
+		merge(l, lo, mid, events);
+		merge(l, mid + 1, hi, events);
+
+		left = lo;
+		right = mid + 1;
+		events.add(new CompareEvent<T>(mid, right));
+		if(l[mid].compareTo(l[right]) <= 0) {
+			return;
+		}
+
+		while(left <= mid && right <= hi) {
+			events.add(new CompareEvent<T>(left, right));
+			if(l[left].compareTo(l[right]) <= 0) {
+				left++;
+			}
+			else {
+				T temp = l[right];
+
+				for(int i = right; i > left; i--) {
+					CopyEvent<T> copy = new CopyEvent<>(i, l[i - 1]);
+					copy.apply(l);
+					events.add(copy);
+				}
+				CopyEvent<T> copy = new CopyEvent<>(left, temp);
+				copy.apply(l);
+				events.add(copy);
+				left++;  mid++;  right++;
 			}
 		}
-		
-		while (first < mid) {
-			temp[index++] = arr[first++];
-		}
-		
-		while (second < hi) {
-			temp[index++] = arr[second++];
-		}
-		
-		for(int j = 0; j < temp.length; j++) {
-			arr[j+lo] = (T) temp[j];
-			events.add(new CopyEvent<T>(j+lo,(T) temp[j]));
-		}
-		return events;
+	}
 
+
+	public static <T extends Comparable<T>> void mergeSortHelper(T[] arr, List<SortEvent<T>>events) {
+		merge(arr, 0, arr.length - 1, events);
 	}
 	
-	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSortHelper(T[] arr, int lo, int hi) {
-		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		if (lo < hi - 1) {
-			int mid = lo + (hi - lo) /2;
-			List<SortEvent<T>> event1 = mergeSortHelper(arr, lo, mid);
-			List<SortEvent<T>> event2 = mergeSortHelper(arr, mid, hi);
-			List<SortEvent<T>> event3 = merge(arr, lo, mid, hi);
-			events.addAll(event1);
-			events.addAll(event2);
-			events.addAll(event3);
-		}
-		return events;
-	}
-
+	
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSort(T[] arr) {
-		
-		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
-		if (arr==null || arr.length == 1)
-			return events;
-					
-		else {
-			events = mergeSortHelper(arr, 0, arr.length);
-		}
+		List<SortEvent<T>> events = new ArrayList<>();
+		mergeSortHelper(arr, events);
 		return events;
 	}
-
-	public static <T extends Comparable<T>> int findPivot(T[] arr, int low, int high) {
-		int mid = (high-low) /2;
-		T first = arr[low];
-		T middle = arr[mid];
-		T last = arr[high];
-		if ((first.compareTo(middle) <= 0) && (middle.compareTo(last) <= 0)) {
-			return mid;
-		}
-		else if ((middle.compareTo(last) <= 0) && (last.compareTo(first) <= 0)) {
-			return high;
-		}
-		else {
-			return low;
-		}
-	}
+	
 	public static <T extends Comparable<T>> List<SortEvent<T>> partition(T[] arr, int low, int high) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		if(low < high) {
-			//T pivot = arr[findPivot(arr,low, high)];
-			T pivot = arr[high];
+	        T pivot = arr[high];
 			int i = low -1;
 			for (int j = low; j < high; j++) {
 				events.add(new CompareEvent<T>(j, high));

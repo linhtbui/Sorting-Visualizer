@@ -27,6 +27,8 @@ public class ArrayPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+    	g.setColor(Color.WHITE);
+    	g.fillRect(0, 0, getWidth(), getHeight());
     	Color current;
     	for (int i = 0; i < notes.length(); i++) {
     		if (notes.isHighlighted(i)) {
