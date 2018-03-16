@@ -59,8 +59,6 @@ public class ControlPanel extends JPanel {
             return Sorts.mergeSort(arr);
         case("Quick"):
             return Sorts.quickSort(arr);
-        case("Bogo"):
-            return Sorts.bogoSort(arr);
         default:
             throw new IllegalArgumentException("generateEvents");
         }
@@ -111,7 +109,6 @@ public class ControlPanel extends JPanel {
            "Bubble",
            "Merge",
            "Quick",
-           "Bogo"
         });
         add(sorts);
         
