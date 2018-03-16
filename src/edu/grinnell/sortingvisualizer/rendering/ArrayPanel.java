@@ -25,6 +25,9 @@ public class ArrayPanel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
     }
 
+    /** recolors bars within the display
+     * @param g, the graphics object
+     */
     @Override
     public void paintComponent(Graphics g) {
     	g.setColor(Color.WHITE);

@@ -10,6 +10,11 @@ import edu.grinnell.sortingvisualizer.events.SwapEvent;
 
 public class Sorts {
 
+	/**Implements the selection sort algorithm 
+	 * 
+	 * @param arr, an array of comparables
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> selectionSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		for(int i=0; i<arr.length; i++) {
@@ -28,6 +33,11 @@ public class Sorts {
 		return events;
 	}
 
+	/**Implements the insertion sort algorithm 
+	 * 
+	 * @param arr, an array of comparables
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> insertionSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		for(int i = 1; i<arr.length; i++) {
@@ -42,6 +52,11 @@ public class Sorts {
 		return events;
 	}
 
+	/**Implements the bubble sort algorithm 
+	 * 
+	 * @param arr, an array of comparables
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> bubbleSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		int swaps = -1;
@@ -112,17 +127,24 @@ public class Sorts {
 	}
 
 
-	public static <T extends Comparable<T>> void mergeSortHelper(T[] arr, List<SortEvent<T>>events) {
-		merge(arr, 0, arr.length - 1, events);
-	}
-	
-	
+	/**Implements the merge sort algorithm 
+	 * 
+	 * @param arr, an array of comparables
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> mergeSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<>();
-		mergeSortHelper(arr, events);
+		merge(arr, 0, arr.length - 1, events);
 		return events;
 	}
 	
+	/**A helper function to partition arrays for quicksort
+	 * 
+	 * @param arr, an array to be sorted
+	 * @param low, the first index of the partition
+	 * @param high, the last index of the partition, exclusive
+	 * @return
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> partition(T[] arr, int low, int high) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		if(low < high) {
@@ -152,12 +174,23 @@ public class Sorts {
 		return events;		
 	}
 	
+	
+	/** Implements the quicksort algorithm
+	 * 
+	 * @param arr, an array to be sorted
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>>  List<SortEvent<T>> quickSort(T[] arr) {
 		return partition(arr, 0, arr.length-1);
 	}
 	
 	
-	
+	/**checks if an array is sorted, recording compare events that occur
+	 * 
+	 * @param arr, an array that may or may not be sorted
+	 * @param events, a list of actions taken
+	 * @return whether or not the array is sorted
+	 */
 	public static <T extends Comparable<T>> boolean isSorted(T[] arr, List<SortEvent<T>> events) {
 		if (arr.length <= 1) {
 			return true;
@@ -171,7 +204,11 @@ public class Sorts {
 		return true;
 	}
 
-	
+	/**A helper function for BOGO sort that randomly shuffles an array
+	 * 
+	 * @param arr, an array to be shuffled
+	 * @param events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> void shuffle(T[] arr, List<SortEvent<T>> events) {
 		int index = 0;
 		Random rand = new Random();
@@ -184,7 +221,11 @@ public class Sorts {
 		}
 	}
 	
-	
+	/**Implements the bogo sort algorithm
+	 * 
+	 * @param arr, an array to be sorted
+	 * @return events, a list of actions taken
+	 */
 	public static <T extends Comparable<T>> List<SortEvent<T>> bogoSort(T[] arr) {
 		List<SortEvent<T>> events = new ArrayList<SortEvent<T>>();
 		while(!isSorted(arr, events)) {
@@ -193,6 +234,11 @@ public class Sorts {
 		return events;
 	}
 	
+	/**A function to sort an array by applying the steps of an already-run algorithm on an identical array
+	 * 
+	 * @param l, an array of comparables
+	 * @param events, a list of actions taken by a previous sorting algorithm
+	 */
 	public static <T extends Comparable<T>> void eventSort(T[] l, List<SortEvent<T>> events) {
 		for (int i = 0; i < events.size(); i++) {
 			events.get(i).apply(l);
